@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domein.Item;
+import com.example.demo.domein.ParentCategory;
 import com.example.demo.repository.ItemRepository;
 
 /**
@@ -40,5 +41,14 @@ public class ItemService {
 	 */
 	public Integer itemRecord() {
 		return itemRepository.itemRecord();
+	}
+	
+	/**
+	 * 親子関係のカテゴリのリストを取得するメソッドです.
+	 * 
+	 * @return カテゴリリスト
+	 */
+	public List<ParentCategory> findCategoryList(){
+		return itemRepository.findCategoryList();
 	}
 }

@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="./mercari.css" th:href="@{/css/mercari.css}" />
   <!-- script -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script th:src="@{/js/jquery.tgHierSelectV2.js}"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <title>Rakus Items</title>
@@ -58,11 +59,7 @@
         <div class="form-group">
           <select class="form-control">
             <option>- parentCategory -</option>
-            <option>parentCategory1</option>
-            <option>parentCategory2</option>
-            <option>parentCategory3</option>
-            <option>parentCategory4</option>
-            <option>parentCategory5</option>
+            <option th:each="parentCategory:${parentCategoryList}" th:value="${parentCategory.parentCategory}" th:text="${parentCategory.parentCategory}">parentCategory1</option>
           </select>
           <select class="form-control">
             <option>- childCategory -</option>
@@ -74,7 +71,7 @@
           </select>
           <select class="form-control">
             <option>- grandChild -</option>
-            <option>grandChild1</option>
+            <option >grandChild1</option>
             <option>grandChild2</option>
             <option>grandChild3</option>
             <option>grandChild4</option>

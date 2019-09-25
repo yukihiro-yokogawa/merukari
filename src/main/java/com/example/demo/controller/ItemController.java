@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,9 +15,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.demo.domein.ChildCategory;
+import com.example.demo.domein.GrandChild;
 import com.example.demo.domein.Item;
+import com.example.demo.domein.ParentCategory;
 import com.example.demo.form.PaginationForm;
 import com.example.demo.service.ItemService;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 
 @Controller
 @RequestMapping("/item")
@@ -42,6 +49,21 @@ public class ItemController {
 		if(session.getAttribute("itemRecord") != itemService.itemRecord()) {
 			Integer itemRecord = ((itemService.itemRecord())/30)+1;
 			session.setAttribute("itemRecord",itemRecord);
+		}
+		
+		//カテゴリリスト取得
+		List<ParentCategory> categoryList = itemService.findCategoryList();
+		Multimap<Integer,String> parentCategoryMap = LinkedHashMultimap.create();
+		Multimap<Integer,String> childCategoryMap = LinkedHashMultimap.create();
+		Multimap<Integer,String> grandChildMap = LinkedHashMultimap.create();
+		for(ParentCategory parentCategory:categoryList) {
+			parentCategoryMap.put(parentCategory.getId(),parentCategory.getParentCategory());
+			for(ChildCategory childCategory:parentCategory.getChildCategory()) {
+				childCategoryMap.put(childCategory.getChildParent(),childCategory.getChildCategory());
+				for(GrandChild grandChild:childCategory.getGrandCategory()) {
+					grandChildMap.put(grandChild.getGrandChildParent(),grandChild.getGrandChild());
+				}
+			}
 		}
 		
 		model.addAttribute("pageMax",session.getAttribute("itemRecord"));
@@ -92,6 +114,21 @@ public class ItemController {
 		}else if(pageNum == 1) {
 			//1ページ目
 			itemList = itemService.findAll(1);			
+		}
+		
+		//カテゴリリスト取得
+		List<ParentCategory> categoryList = itemService.findCategoryList();
+		Multimap<Integer,String> parentCategoryMap = LinkedHashMultimap.create();
+		Multimap<Integer,String> childCategoryMap = LinkedHashMultimap.create();
+		Multimap<Integer,String> grandChildMap = LinkedHashMultimap.create();
+		for(ParentCategory parentCategory:categoryList) {
+			parentCategoryMap.put(parentCategory.getId(),parentCategory.getParentCategory());
+			for(ChildCategory childCategory:parentCategory.getChildCategory()) {
+				childCategoryMap.put(childCategory.getChildParent(),childCategory.getChildCategory());
+				for(GrandChild grandChild:childCategory.getGrandCategory()) {
+					grandChildMap.put(grandChild.getGrandChildParent(),grandChild.getGrandChild());
+				}
+			}
 		}
 		
 		model.addAttribute("pageMax",session.getAttribute("itemRecord"));
