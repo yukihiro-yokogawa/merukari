@@ -53,14 +53,13 @@
     <div id="forms">
       <form action="" class="form-inline" role="form">
         <div class="form-group">
-          <input type="text" class="form-control" id="name" placeholder="item name"/>
+          <input type="input" class="form-control" id="name" placeholder="item name"/>
         </div>
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
-          <select th:each="parentCategory:${parentCategoryMap}" class="form-control">
+          <select class="form-control">
             <option>- parentCategory -</option>
-            <option>parentCategory1</option>
-            <option th:each="parent:${parentCategory}" th:text="${parent}">parentCategory1</option>
+            <option th:each="parentCategory:${parentCategoryList}" th:value="${parentCategory.parentCategory}" th:text="${parentCategory.parentCategory}">parentCategory1</option>
           </select>
           <select class="form-control">
             <option>- childCategory -</option>

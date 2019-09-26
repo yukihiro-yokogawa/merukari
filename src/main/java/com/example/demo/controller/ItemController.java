@@ -30,50 +30,52 @@ public class ItemController {
 
 	@Autowired
 	private ItemService itemService;
-	
+
 	@ModelAttribute
 	public PaginationForm setUpForm() {
 		return new PaginationForm();
 	}
-	
+
 	/**
-	 * top画面のViewです。
-	 * id 1~30を表示します.
+	 * top画面のViewです。 id 1~30を表示します.
 	 * 
 	 * @return
 	 */
 	@RequestMapping("/top")
-	public String itemTop(Model model,HttpSession session) {
+	public String itemTop(Model model, HttpSession session) {
 		List<Item> itemList = itemService.findAll(1);
-		
-		if(session.getAttribute("itemRecord") != itemService.itemRecord()) {
-			Integer itemRecord = ((itemService.itemRecord())/30)+1;
-			session.setAttribute("itemRecord",itemRecord);
+
+		if (session.getAttribute("itemRecord") != itemService.itemRecord()) {
+			Integer itemRecord = ((itemService.itemRecord()) / 30) + 1;
+			session.setAttribute("itemRecord", itemRecord);
 		}
-		
-		//カテゴリリスト取得
+
+		// カテゴリリスト取得
 		List<ParentCategory> categoryList = itemService.findCategoryList();
-		Multimap<Integer,String> parentCategoryMap = LinkedHashMultimap.create();
-		Multimap<Integer,String> childCategoryMap = LinkedHashMultimap.create();
-		Multimap<Integer,String> grandChildMap = LinkedHashMultimap.create();
-		for(ParentCategory parentCategory:categoryList) {
-			parentCategoryMap.put(parentCategory.getId(),parentCategory.getParentCategory());
-			for(ChildCategory childCategory:parentCategory.getChildCategory()) {
-				childCategoryMap.put(childCategory.getChildParent(),childCategory.getChildCategory());
-				for(GrandChild grandChild:childCategory.getGrandCategory()) {
-					grandChildMap.put(grandChild.getGrandChildParent(),grandChild.getGrandChild());
+		Multimap<Integer, String> parentCategoryMap = LinkedHashMultimap.create();
+		Multimap<Integer, String> childCategoryMapByParent = LinkedHashMultimap.create();
+		Multimap<Integer, String> childCategoryMapById = LinkedHashMultimap.create();
+		Multimap<Integer, String> grandChildMap = LinkedHashMultimap.create();
+		for (ParentCategory parentCategory : categoryList) {
+			parentCategoryMap.put(parentCategory.getId(), parentCategory.getParentCategory());
+			for (ChildCategory childCategory : parentCategory.getChildCategory()) {
+				childCategoryMapByParent.put(childCategory.getChildParent(), childCategory.getChildCategory());
+				childCategoryMapById.put(childCategory.getChildCategoryId(), childCategory.getChildCategory());
+				for (GrandChild grandChild : childCategory.getGrandCategory()) {
+					grandChildMap.put(grandChild.getGrandChildParent(), grandChild.getGrandChild());
 				}
 			}
 		}
 		
-		model.addAttribute("pageMax",session.getAttribute("itemRecord"));
-		model.addAttribute("page",1);
-		model.addAttribute("itemList",itemList);
+		model.addAttribute("parentCategoryMap",parentCategoryMap);
 		
+		model.addAttribute("pageMax", session.getAttribute("itemRecord"));
+		model.addAttribute("page", 1);
+		model.addAttribute("itemList", itemList);
+
 		return "list.html";
 	}
-	
-	
+
 	/**
 	 * pagination用のtop画面
 	 * 
@@ -84,56 +86,58 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping("pagination")
-	public String paginationTop(@Validated PaginationForm form , BindingResult rs,Model model,HttpSession session) {
-		List <Item> itemList = new ArrayList<>();
+	public String paginationTop(@Validated PaginationForm form, BindingResult rs, Model model, HttpSession session) {
+		List<Item> itemList = new ArrayList<>();
 		Integer itemRecordFull = 0;
 		Integer pageNum = 0;
-		
-		if(rs.hasErrors()) {
+
+		if (rs.hasErrors()) {
 			return itemTop(model, session);
 		}
-		
+
 		pageNum = Integer.parseInt(form.getPage());
-		
-		//sessionがnullでない時
-		if(session.getAttribute("itemRecord") != null) {
+
+		// sessionがnullでない時
+		if (session.getAttribute("itemRecord") != null) {
 			itemRecordFull = Integer.parseInt(String.valueOf(session.getAttribute("itemRecord")));
 		}
-		
-		//条件外の時にtop画面に戻す.
-		if(itemRecordFull < pageNum || pageNum <= 0 || session.getAttribute("itemRecord") == null) {
-			rs.rejectValue("page","","不正な値です。");
-			return itemTop(model,session);
+
+		// 条件外の時にtop画面に戻す.
+		if (itemRecordFull < pageNum || pageNum <= 0 || session.getAttribute("itemRecord") == null) {
+			rs.rejectValue("page", "", "不正な値です。");
+			return itemTop(model, session);
 		}
-		
-		//ページネーション
-		if(pageNum >= 2) {
-			//2ページ目以降
-			Integer paginationNum = ((pageNum - 1) * 30)+1;
-			itemList = itemService.findAll(paginationNum);			
-		}else if(pageNum == 1) {
-			//1ページ目
-			itemList = itemService.findAll(1);			
+
+		// ページネーション
+		if (pageNum >= 2) {
+			// 2ページ目以降
+			Integer paginationNum = ((pageNum - 1) * 30) + 1;
+			itemList = itemService.findAll(paginationNum);
+		} else if (pageNum == 1) {
+			// 1ページ目
+			itemList = itemService.findAll(1);
 		}
-		
-		//カテゴリリスト取得
+
+		// カテゴリリスト取得
 		List<ParentCategory> categoryList = itemService.findCategoryList();
-		Multimap<Integer,String> parentCategoryMap = LinkedHashMultimap.create();
-		Multimap<Integer,String> childCategoryMap = LinkedHashMultimap.create();
-		Multimap<Integer,String> grandChildMap = LinkedHashMultimap.create();
-		for(ParentCategory parentCategory:categoryList) {
-			parentCategoryMap.put(parentCategory.getId(),parentCategory.getParentCategory());
-			for(ChildCategory childCategory:parentCategory.getChildCategory()) {
-				childCategoryMap.put(childCategory.getChildParent(),childCategory.getChildCategory());
-				for(GrandChild grandChild:childCategory.getGrandCategory()) {
-					grandChildMap.put(grandChild.getGrandChildParent(),grandChild.getGrandChild());
+		Multimap<Integer, String> parentCategoryMap = LinkedHashMultimap.create();
+		Multimap<Integer, String> childCategoryMapByParent = LinkedHashMultimap.create();
+		Multimap<Integer, String> childCategoryMapById = LinkedHashMultimap.create();
+		Multimap<Integer, String> grandChildMap = LinkedHashMultimap.create();
+		for (ParentCategory parentCategory : categoryList) {
+			parentCategoryMap.put(parentCategory.getId(), parentCategory.getParentCategory());
+			for (ChildCategory childCategory : parentCategory.getChildCategory()) {
+				childCategoryMapByParent.put(childCategory.getChildParent(), childCategory.getChildCategory());
+				childCategoryMapById.put(childCategory.getChildCategoryId(), childCategory.getChildCategory());
+				for (GrandChild grandChild : childCategory.getGrandCategory()) {
+					grandChildMap.put(grandChild.getGrandChildParent(), grandChild.getGrandChild());
 				}
 			}
 		}
-		
-		model.addAttribute("pageMax",session.getAttribute("itemRecord"));
+
+		model.addAttribute("pageMax", session.getAttribute("itemRecord"));
 		model.addAttribute("page", pageNum);
-		model.addAttribute("itemList",itemList);
+		model.addAttribute("itemList", itemList);
 		return "list.html";
 	}
 }

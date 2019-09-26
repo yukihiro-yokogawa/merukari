@@ -90,6 +90,7 @@ public class ItemRepository {
 			if(childCategoryBeforeId != childCategoryId) {
 				
 				ChildCategory childCategory = new ChildCategory();
+				childCategory.setChildCategoryId(rs.getInt("child_id"));
 				childCategory.setChildParent(rs.getInt("child_parent"));
 				childCategory.setChildCategory(rs.getString("child_name"));
 			
@@ -118,25 +119,26 @@ public class ItemRepository {
 	
 		SqlParameterSource param = new MapSqlParameterSource().addValue("pagingId",pagingId);
 		
-		String sql = "SELECT"
-					+ " itm.id AS id"
-					+ ",itm.name AS name"
-					+ ",itm.condition AS condition"
-					+ ",cat.name_all AS category"
-					+ ",itm.brand AS brand"
-					+ ",itm.price AS price"
-					+ ",itm.shipping AS shipping"
-					+ ",itm.description AS description"
-					+ " FROM"
-					+ " items AS itm"
-					+ " LEFT OUTER JOIN"
-					+ " category AS cat"
-					+ " ON"
-					+ " itm.category = cat.id"
-					+ " WHERE itm.id >= :pagingId"
-					+ " ORDER BY itm.id LIMIT 30";
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT");
+		sql.append(" itm.id AS id");
+		sql.append(",itm.name AS name");
+		sql.append(",itm.condition AS condition");
+		sql.append(",cat.name_all AS category");
+		sql.append(",itm.brand AS brand");
+		sql.append(",itm.price AS price");
+		sql.append(",itm.shipping AS shipping");
+		sql.append(",itm.description AS description");
+		sql.append(" FROM");
+		sql.append(" items AS itm");
+		sql.append(" LEFT OUTER JOIN");
+		sql.append(" category AS cat");
+		sql.append(" ON");
+		sql.append(" itm.category = cat.id");
+		sql.append(" WHERE itm.id >= :pagingId");
+		sql.append(" ORDER BY itm.id LIMIT 30");
 		
-		List<Item> itemList = template.query(sql, param,ITEM_ROW_MAPPER);
+		List<Item> itemList = template.query(sql.toString(), param,ITEM_ROW_MAPPER);
 		
 		return itemList;
 	}
@@ -161,7 +163,7 @@ public class ItemRepository {
 	 * @return カテゴリリスト
 	 */
 	public List<ParentCategory> findCategoryList(){
-		String sql = "SELECT parent.id AS parent_id, parent.name AS parent_name,child.parent AS child_parent ,child.id AS child_id,child.name AS child_name,grand_child.parent AS grand_child_parent,grand_child.name AS grand_child_name  FROM category AS parent INNER JOIN category AS child ON parent.id = child.parent INNER JOIN category AS grand_child ON child.id = grand_child.parent WHERE child.name_all IS NULL ORDER BY parent.id,child.id,grand_child.id";
+		String sql = "SELECT parent.id AS parent_id, parent.name AS parent_name,child.id AS child_id,child.parent AS child_parent ,child.id AS child_id,child.name AS child_name,grand_child.parent AS grand_child_parent,grand_child.name AS grand_child_name  FROM category AS parent INNER JOIN category AS child ON parent.id = child.parent INNER JOIN category AS grand_child ON child.id = grand_child.parent WHERE child.name_all IS NULL ORDER BY parent.id,child.id,grand_child.id";
 		
 		List<ParentCategory> parentCategoryList = template.query(sql, PARENT_CATEGORY_RESULT_SET_EXTRACTOR);
 		

@@ -1,7 +1,7 @@
 package com.example.demo.domein;
 
 public class GrandChild {
-
+	
 	Integer grandChildParent;
 	
 	String grandChild;

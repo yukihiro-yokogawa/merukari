@@ -3,13 +3,23 @@ package com.example.demo.domein;
 import java.util.List;
 
 public class ChildCategory {
-
+	
+	Integer childCategoryId;
+	
 	Integer childParent;
 	
 	String childCategory;
 	
 	List<GrandChild> grandCategory;
 	
+	public Integer getChildCategoryId() {
+		return childCategoryId;
+	}
+
+	public void setChildCategoryId(Integer childCategoryId) {
+		this.childCategoryId = childCategoryId;
+	}
+
 	public Integer getChildParent() {
 		return childParent;
 	}
@@ -36,8 +46,8 @@ public class ChildCategory {
 
 	@Override
 	public String toString() {
-		return "ChildCategory [childParent=" + childParent + ", childCategory=" + childCategory + ", grandCategory="
-				+ grandCategory + "]";
+		return "ChildCategory [childCategoryId=" + childCategoryId + ", childParent=" + childParent + ", childCategory="
+				+ childCategory + ", grandCategory=" + grandCategory + "]";
 	}
 	
 	
