@@ -15,73 +15,9 @@
   <link rel="stylesheet" href="./mercari.css" th:href="@{/css/mercari.css}" />
   <!-- script -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script th:src="@{/js/jquery.tgHierSelectV2.js}"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script>
-$(function(){
-	//JSONデータへのパス
-	var parentPath = "http://localhost:8080/merukari/categoryList/getParentCategory";  //httpから始まるURL型式でもOKです。
- 
-    //JSONデータを取得し、配列に格納する
-    $.getJSON(parentPath, function(data){
-		var parentList = new Map();
-		$.each(data, function(key,val){
-			parentList.set(key,val);
-		});
-		console.log(parentList);
-
-	//取得したJSONデータをコンソールに表示する
-		parentList.forEach(function(value, key){
-			for(var i = 0 ; i <= value.length-1 ; i++){
-				var parentType = {value: key, text: value[i], selected:false}
-				var parentCategory = $('<option>', parentType);
-				$('#parent').append(parentCategory);
-			}
-		});
-    	
-	
-		$('#parent').change(function(){
-			var parentVal = $('#parent').val();
-			console.log(parentVal);
-			$('#child').children().remove();
-			var childPathByParent = "http://localhost:8080/merukari/categoryList/getChildCategoryByParent";
-			$.getJSON(childPathByParent, function(data){
-				var childListByParent = new Map();
-				$.each(data, function(key,val){
-					childListByParent.set(key,val);
-				});
-			
-				var childPathById = "http://localhost:8080/merukari/categoryList/getChildCategoryById";
-				$.getJSON(childPathById, function(data){
-					var childListById = new Map();
-					$.each(data, function(key,val){
-						childListById.set(key,val);
-					});
-				
-					console.log(childListById);
-					
-					
-					childListByParent.forEach(function(valueByParent, keyByParent){
-						if(parentVal == keyByParent){
- 							childListById.forEach(function(valueById,keyById){ 
-								for(var i = 0 ; i <= valueByParent.length-1 ; i++){
-	 								if(valueByParent[i] == valueById){
-										var childType = {value : [keyById], text: valueByParent[i],selevted:false}
-										var childCategory = $('<option>',childType);
-										$('#child').append(childCategory);
-										console.log(childType);
-									}
- 								} 
- 							}) 
-						}
-					})
-				});
-			})
-		});
-	});
-});
-</script>
+  <script th:src="@{/js/pulldown.js}"></script>
   <title>Rakus Items</title>
 </head>
 <body>
@@ -106,7 +42,6 @@ $(function(){
       </div>
     </div>
   </nav>
-  <input type="button" id="btn1" value="ボタン">
   <div id="main" class="container-fluid">
     <!-- addItem link -->
     <div id="addItemButton">
@@ -127,10 +62,11 @@ $(function(){
           <select id="child" class="form-control">
             <option>- childCategory -</option>
           </select>
-          <select class="form-control">
+          <select id="grand-child" class="form-control">
             <option>- grandChild -</option>
           </select>
         </div>
+        <input id="hidden-child" type="hidden">
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
           <input type="text" class="form-control" placeholder="brand"/>

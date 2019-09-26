@@ -1,6 +1,7 @@
 package com.example.demo.domein;
 
 import java.util.List;
+import java.util.Map;
 
 public class ChildCategory {
 	
@@ -9,6 +10,8 @@ public class ChildCategory {
 	Integer childParent;
 	
 	String childCategory;
+	
+	Map<Integer,String> childCategoryMap;
 	
 	List<GrandChild> grandCategory;
 	
@@ -34,6 +37,14 @@ public class ChildCategory {
 
 	public void setChildCategory(String childCategory) {
 		this.childCategory = childCategory;
+	}
+
+	public Map<Integer, String> getChildCategoryMap() {
+		return childCategoryMap;
+	}
+
+	public void setChildCategoryMap(Map<Integer, String> childCategoryMap) {
+		this.childCategoryMap = childCategoryMap;
 	}
 
 	public List<GrandChild> getGrandCategory() {

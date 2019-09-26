@@ -13,15 +13,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.demo.domein.ChildCategory;
-import com.example.demo.domein.GrandChild;
 import com.example.demo.domein.Item;
-import com.example.demo.domein.ParentCategory;
 import com.example.demo.form.PaginationForm;
 import com.example.demo.service.ItemService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 
 @Controller
 @RequestMapping("/item")

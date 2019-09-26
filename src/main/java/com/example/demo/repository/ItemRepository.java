@@ -1,7 +1,9 @@
 package com.example.demo.repository;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -94,6 +96,10 @@ public class ItemRepository {
 				childCategory.setChildCategoryId(rs.getInt("child_id"));
 				childCategory.setChildParent(rs.getInt("child_parent"));
 				childCategory.setChildCategory(rs.getString("child_name"));
+				
+				Map<Integer,String> childCategoryMap = new LinkedHashMap<>();
+				childCategoryMap.put(rs.getInt("child_id"), rs.getString("child_name"));
+				childCategory.setChildCategoryMap(childCategoryMap);
 			
 				childCategory.setGrandCategory(grandChildList);
 				

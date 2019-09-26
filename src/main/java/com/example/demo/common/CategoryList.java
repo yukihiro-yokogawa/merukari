@@ -50,45 +50,24 @@ public class CategoryList {
 
 	}
 
-	@RequestMapping("/getChildCategoryById")
+	@RequestMapping("/getChildCategory")
 	@ResponseBody
-	public String getChildCategoryById() throws JsonProcessingException {
+	public String getChildCategory() throws JsonProcessingException {
 
 		List<ParentCategory> categoryList = itemService.findCategoryList();
 
-		Multimap<Integer, String> childCategoryMultiMapById = LinkedHashMultimap.create();
+		Multimap<Integer, Map<Integer,String>> childCategoryMultiMap = LinkedHashMultimap.create();
 		for (ParentCategory parentCategory : categoryList) {
 			for (ChildCategory childCategory : parentCategory.getChildCategory()) {
-				childCategoryMultiMapById.put(childCategory.getChildCategoryId(), childCategory.getChildCategory());
+				childCategoryMultiMap.put(childCategory.getChildParent(), childCategory.getChildCategoryMap());
 			}
 		}
 
-		Map<Integer, Collection<String>> childCategoryMapById = childCategoryMultiMapById.asMap();
+		Map<Integer, Collection<Map<Integer, String>>> childCategoryMap = childCategoryMultiMap.asMap();
 		ObjectMapper mapper = new ObjectMapper();
-		String childCategoryJsonById = mapper.writeValueAsString(childCategoryMapById);
+		String childCategoryJson = mapper.writeValueAsString(childCategoryMap);
 
-		return childCategoryJsonById;
-
-	}
-
-	@RequestMapping("/getChildCategoryByParent")
-	@ResponseBody
-	public String getChildCategoryByParent() throws JsonProcessingException {
-
-		List<ParentCategory> categoryList = itemService.findCategoryList();
-
-		Multimap<Integer, String> childCategoryMultiMapByParent = LinkedHashMultimap.create();
-		for (ParentCategory parentCategory : categoryList) {
-			for (ChildCategory childCategory : parentCategory.getChildCategory()) {
-				childCategoryMultiMapByParent.put(childCategory.getChildParent(), childCategory.getChildCategory());
-			}
-		}
-
-		Map<Integer, Collection<String>> childCategoryMapByParent = childCategoryMultiMapByParent.asMap();
-		ObjectMapper mapper = new ObjectMapper();
-		String childCategoryJsonByParent = mapper.writeValueAsString(childCategoryMapByParent);
-
-		return childCategoryJsonByParent;
+		return childCategoryJson;
 
 	}
 
