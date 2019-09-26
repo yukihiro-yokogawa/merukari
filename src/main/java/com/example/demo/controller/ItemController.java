@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,6 +19,7 @@ import com.example.demo.domein.Item;
 import com.example.demo.domein.ParentCategory;
 import com.example.demo.form.PaginationForm;
 import com.example.demo.service.ItemService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -40,9 +39,10 @@ public class ItemController {
 	 * top画面のViewです。 id 1~30を表示します.
 	 * 
 	 * @return
+	 * @throws JsonProcessingException
 	 */
 	@RequestMapping("/top")
-	public String itemTop(Model model, HttpSession session) {
+	public String itemTop(Model model, HttpSession session) throws JsonProcessingException {
 		List<Item> itemList = itemService.findAll(1);
 
 		if (session.getAttribute("itemRecord") != itemService.itemRecord()) {
@@ -51,24 +51,8 @@ public class ItemController {
 		}
 
 		// カテゴリリスト取得
-		List<ParentCategory> categoryList = itemService.findCategoryList();
-		Multimap<Integer, String> parentCategoryMap = LinkedHashMultimap.create();
-		Multimap<Integer, String> childCategoryMapByParent = LinkedHashMultimap.create();
-		Multimap<Integer, String> childCategoryMapById = LinkedHashMultimap.create();
-		Multimap<Integer, String> grandChildMap = LinkedHashMultimap.create();
-		for (ParentCategory parentCategory : categoryList) {
-			parentCategoryMap.put(parentCategory.getId(), parentCategory.getParentCategory());
-			for (ChildCategory childCategory : parentCategory.getChildCategory()) {
-				childCategoryMapByParent.put(childCategory.getChildParent(), childCategory.getChildCategory());
-				childCategoryMapById.put(childCategory.getChildCategoryId(), childCategory.getChildCategory());
-				for (GrandChild grandChild : childCategory.getGrandCategory()) {
-					grandChildMap.put(grandChild.getGrandChildParent(), grandChild.getGrandChild());
-				}
-			}
-		}
-		
-		model.addAttribute("parentCategoryMap",parentCategoryMap);
-		
+
+
 		model.addAttribute("pageMax", session.getAttribute("itemRecord"));
 		model.addAttribute("page", 1);
 		model.addAttribute("itemList", itemList);
@@ -84,9 +68,11 @@ public class ItemController {
 	 * @param model
 	 * @param session
 	 * @return
+	 * @throws JsonProcessingException
 	 */
 	@RequestMapping("pagination")
-	public String paginationTop(@Validated PaginationForm form, BindingResult rs, Model model, HttpSession session) {
+	public String paginationTop(@Validated PaginationForm form, BindingResult rs, Model model, HttpSession session)
+			throws JsonProcessingException {
 		List<Item> itemList = new ArrayList<>();
 		Integer itemRecordFull = 0;
 		Integer pageNum = 0;
@@ -119,21 +105,6 @@ public class ItemController {
 		}
 
 		// カテゴリリスト取得
-		List<ParentCategory> categoryList = itemService.findCategoryList();
-		Multimap<Integer, String> parentCategoryMap = LinkedHashMultimap.create();
-		Multimap<Integer, String> childCategoryMapByParent = LinkedHashMultimap.create();
-		Multimap<Integer, String> childCategoryMapById = LinkedHashMultimap.create();
-		Multimap<Integer, String> grandChildMap = LinkedHashMultimap.create();
-		for (ParentCategory parentCategory : categoryList) {
-			parentCategoryMap.put(parentCategory.getId(), parentCategory.getParentCategory());
-			for (ChildCategory childCategory : parentCategory.getChildCategory()) {
-				childCategoryMapByParent.put(childCategory.getChildParent(), childCategory.getChildCategory());
-				childCategoryMapById.put(childCategory.getChildCategoryId(), childCategory.getChildCategory());
-				for (GrandChild grandChild : childCategory.getGrandCategory()) {
-					grandChildMap.put(grandChild.getGrandChildParent(), grandChild.getGrandChild());
-				}
-			}
-		}
 
 		model.addAttribute("pageMax", session.getAttribute("itemRecord"));
 		model.addAttribute("page", pageNum);

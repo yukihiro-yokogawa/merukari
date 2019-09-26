@@ -1,0 +1,42 @@
+multimap
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch develop
+# Your branch is up to date with 'origin/develop'.
+#
+# Changes to be committed:
+#	new file:   bin/.gitignore
+#	new file:   bin/.mvn/wrapper/MavenWrapperDownloader.class
+#	new file:   bin/.mvn/wrapper/maven-wrapper.jar
+#	new file:   bin/.mvn/wrapper/maven-wrapper.properties
+#	new file:   bin/mvnw
+#	new file:   bin/mvnw.cmd
+#	new file:   bin/pom.xml
+#	new file:   bin/src/main/java/com/example/demo/MerukariApplication.class
+#	new file:   bin/src/main/java/com/example/demo/controller/ItemController.class
+#	new file:   bin/src/main/java/com/example/demo/domein/ChildCategory.class
+#	new file:   bin/src/main/java/com/example/demo/domein/GrandChild.class
+#	new file:   bin/src/main/java/com/example/demo/domein/Item.class
+#	new file:   bin/src/main/java/com/example/demo/domein/ParentCategory.class
+#	new file:   bin/src/main/java/com/example/demo/form/ItemForm.class
+#	new file:   bin/src/main/java/com/example/demo/form/PaginationForm.class
+#	new file:   bin/src/main/java/com/example/demo/repository/ItemRepository.class
+#	new file:   bin/src/main/java/com/example/demo/service/ItemService.class
+#	new file:   bin/src/main/resources/application.yml
+#	new file:   bin/src/main/resources/static/css/mercari.css
+#	new file:   bin/src/main/resources/static/js/jquery.tgHierSelectV2.js
+#	new file:   bin/src/main/resources/templates/add.html
+#	new file:   bin/src/main/resources/templates/detail.html
+#	new file:   bin/src/main/resources/templates/edit.html
+#	new file:   bin/src/main/resources/templates/list.html
+#	new file:   bin/src/main/resources/templates/login.html
+#	new file:   bin/src/main/resources/templates/manual.txt
+#	new file:   bin/src/main/resources/templates/register.html
+#	new file:   bin/src/test/java/com/example/demo/MerukariApplicationTests.class
+#	modified:   src/main/java/com/example/demo/controller/ItemController.java
+#	modified:   src/main/java/com/example/demo/domein/ChildCategory.java
+#	modified:   src/main/java/com/example/demo/domein/GrandChild.java
+#	modified:   src/main/java/com/example/demo/repository/ItemRepository.java
+#	modified:   src/main/resources/templates/list.html
+#
