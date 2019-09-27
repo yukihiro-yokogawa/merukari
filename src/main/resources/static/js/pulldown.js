@@ -93,7 +93,9 @@ $(function(){
 						grandChildList.forEach(function(value,key){
 							if(childVal == key){
 								for(var i = 0; i <= value.length-1; i++){
-									
+									console.log(i);
+									console.log(value[i]);
+									console.log(value);
 									var grandChildType = {value : key, text: value[i],selected:false}
 									var grandChildCategory = $('<option>',grandChildType);
 									$('#grand-child').append(grandChildCategory);
