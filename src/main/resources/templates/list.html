@@ -13,11 +13,6 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
     integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
   <link rel="stylesheet" href="./mercari.css" th:href="@{/css/mercari.css}" />
-  <!-- script -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script th:src="@{/js/pulldown.js}"></script>
   <title>Rakus Items</title>
 </head>
 <body>
@@ -29,7 +24,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="./list.html">Rakus Items</a>
+      <a class="navbar-brand" href="./list.html" th:href="@{/item/top}">Rakus Items</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <div>
@@ -50,26 +45,26 @@
 
     <!-- 検索フォーム -->
     <div id="forms">
-      <form action="" class="form-inline" role="form">
+      <form action="" th:action="@{/item/search(page=${page})}" th:object="${searchForm}" class="form-inline" role="form">
         <div class="form-group">
-          <input type="text" class="form-control" id="name" placeholder="item name"/>
+          <input type="text" class="form-control" id="name" name="name" placeholder="item name"/>
         </div>
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
-          <select id="parent" class="form-control">
-            <option>- parentCategory -</option>
+          <select id="parent" class="form-control" name="parentCategoryId" th:field="*{parentCategoryId}">
+            <option value="">- parentCategory -</option>
           </select>
-          <select id="child" class="form-control">
-            <option>- childCategory -</option>
+          <select id="child" class="form-control" name="childCategoryId" th:field="*{childCategoryId}">
+            <option value="">- childCategory -</option>
           </select>
-          <select id="grand-child" class="form-control">
-            <option>- grandChild -</option>
+          <select id="grand-child" class="form-control" name="grandChildCategoryId" th:field="*{grandChildCategoryId}">
+            <option value="">- grandChild -</option>
           </select>
         </div>
-        <input id="hidden-child" type="hidden">
+        <input type="hidden" name="page" th:value="1">
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="brand"/>
+          <input type="text" class="form-control" name="brand" placeholder="brand"/>
         </div>
         <div class="form-group"></div>
         <button type="submit" class="btn btn-default"><i class="fa fa-angle-double-right"></i> search</button>
@@ -80,8 +75,8 @@
     <div class="pages">
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous"><a th:unless="${page==1}" href="#" th:href="@{/item/pagination(page=${page}-1)}">&larr; prev</a></li>
-          <li class="next"><a th:unless="${page==pageMax}" href="#" th:href="@{/item/pagination(page=${page}+1)}">next &rarr;</a></li>
+          <li class="previous"><a th:unless="${page==1}" href="#" th:href="@{/item/search(page=${page}-1)}">&larr; prev</a></li>
+          <li class="next"><a th:unless="${page==pageMax}" href="#" th:href="@{/item/search(page=${page}+1)}">next &rarr;</a></li>
         </ul>
       </nav>
     </div>
@@ -102,7 +97,7 @@
           <tr>
             <td class="item-name"><a href="./detail.html" th:text="${item.name}">Razer BlackWidow Chroma Keyboard</a></td>
             <td class="item-price" th:text="${item.price}">52.0</td>
-            <td class="item-category" th:text="${item.category}"><a href="">Electronics</a> / <a href="">Computers &amp; Tablets</a> / <a href="">Components &amp; Parts</a></td>
+            <td class="item-category"><a href="" th:text="${item.parentName}">Electronics</a> / <a href="" th:text="${item.childName}">Computers &amp; Tablets</a> / <a href="" th:text="${item.grandChildName}">Components &amp; Parts</a></td>
             <td class="item-brand" th:text="${item.brand}"><a href="">Razer</a></td>
             <td class="item-condition" th:text="${item.condition}">3</td>
           </tr>
@@ -114,13 +109,13 @@
     <div class="pages">
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous"><a th:unless="${page==1}" href="#" th:href="@{/item/pagination(page=${page}-1)}">&larr; prev</a></li>
-          <li class="next"><a th:unless="${page==pageMax}" href="#" th:href="@{/item/pagination(page=${page}+1)}">next &rarr;</a></li>
+          <li class="previous"><a th:unless="${page==1}" href="#" th:href="@{/item/search(page=${page}-1)}">&larr; prev</a></li>
+          <li class="next"><a th:unless="${page==pageMax}" href="#" th:href="@{/item/search(page=${page}+1)}">next &rarr;</a></li>
         </ul>
       </nav>
       <!-- ページ番号を指定して表示するフォーム -->
       <div id="select-page">
-        <form class="form-inline" th:action="@{/item/pagination}">
+        <form class="form-inline" th:action="@{/item/search}">
           <div class="form-group" th:object="${paginationForm}">
             <div class="error">
             	<label th:errors="*{page}"></label>
@@ -128,7 +123,7 @@
             <div class="input-group col-xs-6">
               <input type="text" name="page" class="form-control" th:field="*{page}"/>
               <!-- 総ページ数 -->
-              <div class="input-group-addon">/ <span th:text="${session.itemRecord}">20</span></div>
+              <div class="input-group-addon">/ <span th:text="${pageMax}">20</span></div>
             </div>
             <div class="input-group col-xs-1">
               <button type="submit" class="btn btn-default">Go</button>
@@ -138,5 +133,10 @@
       </div>
     </div>
   </div>
+  <!-- script -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script th:src="@{/js/pulldown.js}"></script>
 </body>
 </html>

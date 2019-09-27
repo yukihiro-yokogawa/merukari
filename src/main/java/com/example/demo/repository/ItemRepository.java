@@ -17,6 +17,7 @@ import com.example.demo.domein.ChildCategory;
 import com.example.demo.domein.GrandChild;
 import com.example.demo.domein.Item;
 import com.example.demo.domein.ParentCategory;
+import com.example.demo.domein.Search;
 
 /**
  * 商品情報を操作するリポジトリクラスです.
@@ -39,7 +40,13 @@ public class ItemRepository {
 		item.setId(rs.getInt("id"));
 		item.setName(rs.getString("name"));
 		item.setCondition(rs.getInt("condition"));
-		item.setCategory(rs.getString("category"));
+		item.setParentId(rs.getInt("parentId"));
+		item.setParentName(rs.getString("parentName"));
+		item.setChildId(rs.getInt("childId"));
+		item.setChildParent(rs.getInt("childParent"));
+		item.setChildName(rs.getString("childName"));
+		item.setGrandChildParent(rs.getInt("grandChildParent"));
+		item.setGrandChildName(rs.getString("grandChildName"));
 		item.setBrand(rs.getString("brand"));
 		item.setPrice(rs.getInt("price"));
 		item.setShipping(rs.getInt("shipping"));
@@ -51,7 +58,7 @@ public class ItemRepository {
 	/**
 	 * itemsテーブルのレコード数をEntityにセットするメソッドです.
 	 */
-	private static final ResultSetExtractor<Integer> MAX_ID_RESULT_SET_EXTRACTOR= (rs) ->{
+	private static final ResultSetExtractor<Integer> COUNT_ID_RESULT_SET_EXTRACTOR= (rs) ->{
 		Integer maxId = 0;
 		
 		while(rs.next()) {
@@ -134,23 +141,126 @@ public class ItemRepository {
 		sql.append(" itm.id AS id");
 		sql.append(",itm.name AS name");
 		sql.append(",itm.condition AS condition");
-		sql.append(",cat.name_all AS category");
+		sql.append(",parent.id AS parentId");
+		sql.append(",parent.name AS parentName");
+		sql.append(",child.id AS childId");
+		sql.append(",child.parent AS childParent");
+		sql.append(",child.name AS childName");
+		sql.append(",grand_child.parent AS grandChildParent");
+		sql.append(",grand_child.name AS grandChildName");
 		sql.append(",itm.brand AS brand");
 		sql.append(",itm.price AS price");
 		sql.append(",itm.shipping AS shipping");
 		sql.append(",itm.description AS description");
 		sql.append(" FROM");
-		sql.append(" items AS itm");
-		sql.append(" LEFT OUTER JOIN");
-		sql.append(" category AS cat");
+		sql.append(" category AS parent");
+		sql.append(" INNER JOIN");
+		sql.append(" category AS child");
 		sql.append(" ON");
-		sql.append(" itm.category = cat.id");
+		sql.append(" parent.id = child.parent");
+		sql.append(" INNER JOIN");
+		sql.append(" category AS grand_child");
+		sql.append(" ON");
+		sql.append(" child.id = grand_child.parent");
+		sql.append(" RIGHT OUTER JOIN");
+		sql.append(" items AS itm");
+		sql.append(" ON");
+		sql.append(" itm.category = grand_child.id");
 		sql.append(" WHERE itm.id >= :pagingId");
-		sql.append(" ORDER BY itm.id LIMIT 30");
+		sql.append(" AND parent.parent IS NULL");
+		sql.append(" ORDER BY");
+		sql.append(" itm.id");
+		sql.append(",parent.id");
+		sql.append(",child.id");
+		sql.append(",grand_child.id");
+		sql.append(" LIMIT 30");
 		
 		List<Item> itemList = template.query(sql.toString(), param,ITEM_ROW_MAPPER);
 		
 		return itemList;
+	}
+	
+	public List<Item> findItem(Search search, Integer pagingId){
+		
+		SqlParameterSource param = new MapSqlParameterSource()
+				.addValue("name", "%" + search.getName() + "%")
+				.addValue("brand","%" + search.getBrand() + "%")
+				.addValue("childCategoryId", search.getChildCategoryId())
+				.addValue("grandChildCategoryId", search.getGrandChildCategoryId())
+				.addValue("parentCategoryId", search.getParentCategoryId())
+				.addValue("pagingId", pagingId);
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT");
+		sql.append(" itm.id AS id");
+		sql.append(",itm.name AS name");
+		sql.append(",itm.condition AS condition");
+		sql.append(",parent.id AS parentId");
+		sql.append(",parent.name AS parentName");
+		sql.append(",child.id AS childId");
+		sql.append(",child.parent AS childParent");
+		sql.append(",child.name AS childName");
+		sql.append(",grand_child.parent AS grandChildParent");
+		sql.append(",grand_child.name AS grandChildName");
+		sql.append(",itm.brand AS brand");
+		sql.append(",itm.price AS price");
+		sql.append(",itm.shipping AS shipping");
+		sql.append(",itm.description AS description");
+		sql.append(" FROM");
+		sql.append(" category AS parent");
+		sql.append(" INNER JOIN");
+		sql.append(" category AS child");
+		sql.append(" ON");
+		sql.append(" parent.id = child.parent");
+		sql.append(" INNER JOIN");
+		sql.append(" category AS grand_child");
+		sql.append(" ON");
+		sql.append(" child.id = grand_child.parent");
+		sql.append(" RIGHT OUTER JOIN");
+		sql.append(" items AS itm");
+		sql.append(" ON");
+		sql.append(" itm.category = grand_child.id");
+		sql.append(" WHERE itm.id >= :pagingId");
+		sql.append(" AND parent.parent IS NULL");
+		sql.append(" ORDER BY");
+		sql.append(" itm.id");
+		sql.append(" LIMIT 30");
+		
+		List<Item> itemList = template.query(sql.toString() ,param ,ITEM_ROW_MAPPER);
+		
+		return itemList;
+	}
+	
+	public Integer ItemRecorbBySearch(Search search){
+		
+		SqlParameterSource param = new MapSqlParameterSource()
+				.addValue("name", "%" + search.getName() + "%")
+				.addValue("brand","%" + search.getBrand() + "%")
+				.addValue("childCategoryId", search.getChildCategoryId())
+				.addValue("grandChildCategoryId", search.getGrandChildCategoryId())
+				.addValue("parentCategoryId", search.getParentCategoryId());
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT");
+		sql.append(" COUNT(itm.id) AS id");
+		sql.append(" FROM");
+		sql.append(" category AS parent");
+		sql.append(" INNER JOIN");
+		sql.append(" category AS child");
+		sql.append(" ON");
+		sql.append(" parent.id = child.parent");
+		sql.append(" INNER JOIN");
+		sql.append(" category AS grand_child");
+		sql.append(" ON");
+		sql.append(" child.id = grand_child.parent");
+		sql.append(" RIGHT OUTER JOIN");
+		sql.append(" items AS itm");
+		sql.append(" ON");
+		sql.append(" itm.category = grand_child.id");
+		
+		Integer itemRecordBySearch = template.query(sql.toString(),param ,COUNT_ID_RESULT_SET_EXTRACTOR);
+		
+		return itemRecordBySearch;
 	}
 	
 	/**
@@ -161,7 +271,7 @@ public class ItemRepository {
 	public Integer itemRecord() {
 		String sql ="SELECT COUNT(id) AS id FROM items;";
 		
-		Integer itemRecord = template.query(sql, MAX_ID_RESULT_SET_EXTRACTOR);
+		Integer itemRecord = template.query(sql, COUNT_ID_RESULT_SET_EXTRACTOR);
 		
 		return itemRecord;
 		

@@ -18,6 +18,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
+/**
+ * JSON形式のカテゴリリストを表示させるcontrollerクラスです.
+ * 
+ * @author yukihiro.yokogawa
+ *
+ */
 @Controller
 @RequestMapping("/categoryList")
 public class CategoryList {
@@ -50,6 +56,12 @@ public class CategoryList {
 
 	}
 
+	/**
+	 * JSON形式の子要素のカテゴリリストを表示させるメソッドです.
+	 * 
+	 * @return 子要素のカテゴリリスト(JSON)
+	 * @throws JsonProcessingException
+	 */
 	@RequestMapping("/getChildCategory")
 	@ResponseBody
 	public String getChildCategory() throws JsonProcessingException {
@@ -71,6 +83,12 @@ public class CategoryList {
 
 	}
 
+	/**
+	 * 孫要素のカテゴリリストを表示させるメソッドです.
+	 * 
+	 * @return 孫要素のカテゴリリスト(JSON)
+	 * @throws JsonProcessingException
+	 */
 	@RequestMapping("/getGrandChildCategory")
 	@ResponseBody
 	public String getGrandChildCategory() throws JsonProcessingException {

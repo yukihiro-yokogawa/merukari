@@ -11,8 +11,19 @@ public class Item {
 	/**	商品状況 */
 	Integer condition;
 	
-	/** カテゴリ名 */
-	String category;
+	Integer parentId;
+	
+	String parentName;
+	
+	Integer childId;
+	
+	Integer childParent;
+	
+	String childName;
+	
+	Integer grandChildParent;
+	
+	String grandChildName;
 	
 	/** ブランド名 */
 	String brand;
@@ -50,12 +61,60 @@ public class Item {
 		this.condition = condition;
 	}
 
-	public String getCategory() {
-		return category;
+	public Integer getParentId() {
+		return parentId;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	public Integer getChildId() {
+		return childId;
+	}
+
+	public void setChildId(Integer childId) {
+		this.childId = childId;
+	}
+
+	public Integer getChildParent() {
+		return childParent;
+	}
+
+	public void setChildParent(Integer childParent) {
+		this.childParent = childParent;
+	}
+
+	public String getChildName() {
+		return childName;
+	}
+
+	public void setChildName(String childName) {
+		this.childName = childName;
+	}
+
+	public Integer getGrandChildParent() {
+		return grandChildParent;
+	}
+
+	public void setGrandChildParent(Integer grandChildParent) {
+		this.grandChildParent = grandChildParent;
+	}
+
+	public String getGrandChildName() {
+		return grandChildName;
+	}
+
+	public void setGrandChildName(String grandChildName) {
+		this.grandChildName = grandChildName;
 	}
 
 	public String getBrand() {
@@ -92,9 +151,13 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", name=" + name + ", condition=" + condition + ", category=" + category + ", brand="
-				+ brand + ", price=" + price + ", shipping=" + shipping + ", description=" + description
-				+ "]";
+		return "Item [id=" + id + ", name=" + name + ", condition=" + condition + ", parentId=" + parentId
+				+ ", parentName=" + parentName + ", childId=" + childId + ", childParent=" + childParent
+				+ ", childName=" + childName + ", grandChildParent=" + grandChildParent + ", grandChildName="
+				+ grandChildName + ", brand=" + brand + ", price=" + price + ", shipping=" + shipping + ", description="
+				+ description + "]";
 	}
+	
+	
 	
 }
