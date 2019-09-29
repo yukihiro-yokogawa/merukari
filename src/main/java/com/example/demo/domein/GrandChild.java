@@ -1,14 +1,15 @@
 package com.example.demo.domein;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class GrandChild {
 	
 	Integer grandChildParent;
 	
-	String grandChild;
-
-	public String getGrandChild() {
-		return grandChild;
-	}
+	String grandChildName;
+	
+	Map<Integer,String> grandChildCategoryMap = new LinkedHashMap<>();	
 	
 	public Integer getGrandChildParent() {
 		return grandChildParent;
@@ -18,13 +19,26 @@ public class GrandChild {
 		this.grandChildParent = grandChildParent;
 	}
 
-	public void setGrandChild(String grandChild) {
-		this.grandChild = grandChild;
+	public String getGrandChildName() {
+		return grandChildName;
+	}
+
+	public void setGrandChildName(String grandChildName) {
+		this.grandChildName = grandChildName;
+	}
+
+	public Map<Integer, String> getGrandChildCategoryMap() {
+		return grandChildCategoryMap;
+	}
+
+	public void setGrandChildCategoryMap(Map<Integer, String> grandChildCategoryMap) {
+		this.grandChildCategoryMap = grandChildCategoryMap;
 	}
 
 	@Override
 	public String toString() {
-		return "GrandChild [grandChildParent=" + grandChildParent + ", grandChild=" + grandChild + "]";
+		return "GrandChild [grandChildId=" + grandChildParent + ", grandChildName=" + grandChildName
+				+ ", grandChildCategoryMap=" + grandChildCategoryMap + "]";
 	}
 	
 }

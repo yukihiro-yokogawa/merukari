@@ -65,21 +65,25 @@ public class SearchForm {
 	}
 	
 	public boolean getIsEmpty(SearchForm searchForm) {
+		//nullチェック
 		if(searchForm == null) {
-			return true;
+			System.out.println("searchForm = null");
+			return false;
 		}
-
+		
+		//nullチェック
 		if(searchForm.getName() == null && searchForm.getParentCategoryId() == null && searchForm.getChildCategoryId() == null && searchForm.getGrandChildCategoryId() == null && searchForm.getBrand() == null) {
-			return true;
+			System.out.println("searchForm IN  null");
+			return false;
 		}
 		
-		if(searchForm.getName() != null && searchForm.getParentCategoryId() != null && searchForm.getChildCategoryId() != null && searchForm.getGrandChildCategoryId() != null && searchForm.getBrand() != null) {
-			if(searchForm.getName().isEmpty() && searchForm.getParentCategoryId().isEmpty() && searchForm.getChildCategoryId().isEmpty() && searchForm.getGrandChildCategoryId().isEmpty() && searchForm.getBrand().isEmpty()){
-				return true;
-			}
+		//全件検索用
+		if(searchForm.getName().isEmpty() && searchForm.getParentCategoryId() .equals("0") && searchForm.getChildCategoryId() .equals("0") && searchForm.getGrandChildCategoryId() .equals("0") && searchForm.getBrand().isEmpty()) {
+			System.out.println("searchForm IN  0");
+			return false;
 		}
 		
-		return false;
+		return true;
 	}
 
 	@Override

@@ -11,18 +11,25 @@ public class Item {
 	/**	商品状況 */
 	Integer condition;
 	
+	/** 親カテゴリのID */
 	Integer parentId;
 	
+	/** 親カテゴリ名 */
 	String parentName;
 	
+	/** 子カテゴリのID */
 	Integer childId;
 	
+	/** 子カテゴリの親ID */
 	Integer childParent;
 	
+	/** 子カテゴリ名 */
 	String childName;
 	
+	/** 孫カテゴリの親ID */
 	Integer grandChildParent;
 	
+	/** 孫カテゴリ名 */
 	String grandChildName;
 	
 	/** ブランド名 */
@@ -37,6 +44,14 @@ public class Item {
 	/** 商品概要 */
 	String description;
 	
+	/**	ページ内IDの最大値  */
+	Integer maxId;
+	
+	/**	ページ内のIDの最小値 */
+	Integer minId;
+	
+	Integer lastPage;
+
 	public Integer getId() {
 		return id;
 	}
@@ -149,13 +164,37 @@ public class Item {
 		this.description = description;
 	}
 
+	public Integer getMaxId() {
+		return maxId;
+	}
+
+	public void setMaxId(Integer maxId) {
+		this.maxId = maxId;
+	}
+	
+	public Integer getMinId() {
+		return minId;
+	}
+
+	public void setMinId(Integer minId) {
+		this.minId = minId;
+	}
+	
+	public Integer getLastPage() {
+		return lastPage;
+	}
+
+	public void setLastPage(Integer lastPage) {
+		this.lastPage = lastPage;
+	}
+
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", condition=" + condition + ", parentId=" + parentId
 				+ ", parentName=" + parentName + ", childId=" + childId + ", childParent=" + childParent
 				+ ", childName=" + childName + ", grandChildParent=" + grandChildParent + ", grandChildName="
 				+ grandChildName + ", brand=" + brand + ", price=" + price + ", shipping=" + shipping + ", description="
-				+ description + "]";
+				+ description + ", maxId=" + maxId + ", minId=" + minId + "]";
 	}
 	
 	

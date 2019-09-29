@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.domein.ChildCategory;
 import com.example.demo.domein.GrandChild;
 import com.example.demo.domein.ParentCategory;
-import com.example.demo.service.ItemService;
+import com.example.demo.repository.CategoryRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.LinkedHashMultimap;
@@ -29,7 +29,7 @@ import com.google.common.collect.Multimap;
 public class CategoryList {
 
 	@Autowired
-	private ItemService itemService;
+	private CategoryRepository categoryRepository;
 
 	/**
 	 * 親カテゴリのJsonDataです.
@@ -41,7 +41,7 @@ public class CategoryList {
 	@ResponseBody
 	public String getParentCategory() throws JsonProcessingException {
 
-		List<ParentCategory> categoryList = itemService.findCategoryList();
+		List<ParentCategory> categoryList = categoryRepository.findCategoryList();
 
 		Multimap<Integer, String> parentCategoryMultiMap = LinkedHashMultimap.create();
 		for (ParentCategory parentCategory : categoryList) {
@@ -66,7 +66,7 @@ public class CategoryList {
 	@ResponseBody
 	public String getChildCategory() throws JsonProcessingException {
 
-		List<ParentCategory> categoryList = itemService.findCategoryList();
+		List<ParentCategory> categoryList = categoryRepository.findCategoryList();
 
 		Multimap<Integer, Map<Integer,String>> childCategoryMultiMap = LinkedHashMultimap.create();
 		for (ParentCategory parentCategory : categoryList) {
@@ -93,18 +93,18 @@ public class CategoryList {
 	@ResponseBody
 	public String getGrandChildCategory() throws JsonProcessingException {
 
-		List<ParentCategory> categoryList = itemService.findCategoryList();
+		List<ParentCategory> categoryList = categoryRepository.findCategoryList();
 
-		Multimap<Integer, String> grandChildMultiMap = LinkedHashMultimap.create();
+		Multimap<Integer, Map<Integer,String>> grandChildMultiMap = LinkedHashMultimap.create();
 		for (ParentCategory parentCategory : categoryList) {
 			for (ChildCategory childCategory : parentCategory.getChildCategory()) {
 				for (GrandChild grandChild : childCategory.getGrandCategory()) {
-					grandChildMultiMap.put(grandChild.getGrandChildParent(), grandChild.getGrandChild());
+					grandChildMultiMap.put(grandChild.getGrandChildParent(),grandChild.getGrandChildCategoryMap());
 				}
 			}
 		}
 
-		Map<Integer, Collection<String>> grandChildCategoryMap = grandChildMultiMap.asMap();
+		Map<Integer, Collection<Map<Integer,String>>> grandChildCategoryMap = grandChildMultiMap.asMap();
 		ObjectMapper mapper = new ObjectMapper();
 		String grandChildCategoryJsonByParent = mapper.writeValueAsString(grandChildCategoryMap);
 

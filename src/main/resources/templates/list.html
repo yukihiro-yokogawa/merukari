@@ -52,13 +52,10 @@
         <div class="form-group"><i class="fa fa-plus"></i></div>
         <div class="form-group">
           <select id="parent" class="form-control" name="parentCategoryId" th:field="*{parentCategoryId}">
-            <option value="">- parentCategory -</option>
           </select>
           <select id="child" class="form-control" name="childCategoryId" th:field="*{childCategoryId}">
-            <option value="">- childCategory -</option>
           </select>
           <select id="grand-child" class="form-control" name="grandChildCategoryId" th:field="*{grandChildCategoryId}">
-            <option value="">- grandChild -</option>
           </select>
         </div>
         <input type="hidden" name="page" th:value="1">
@@ -75,8 +72,8 @@
     <div class="pages">
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous"><a th:unless="${page==1}" href="#" th:href="@{/item/search(page=${page}-1)}">&larr; prev</a></li>
-          <li class="next"><a th:unless="${page==pageMax}" href="#" th:href="@{/item/search(page=${page}+1)}">next &rarr;</a></li>
+          <li class="previous"><a th:unless="${page==1}" href="#" th:href="@{/item/search(page=${page}-1,paging=prev)}">&larr; prev</a></li>
+          <li class="next"><a th:unless="${page==pageMax}" href="#" th:href="@{/item/search(page=${page}+1,paging=next)}">next &rarr;</a></li>
         </ul>
       </nav>
     </div>
@@ -109,8 +106,8 @@
     <div class="pages">
       <nav class="page-nav">
         <ul class="pager">
-          <li class="previous"><a th:unless="${page==1}" href="#" th:href="@{/item/search(page=${page}-1)}">&larr; prev</a></li>
-          <li class="next"><a th:unless="${page==pageMax}" href="#" th:href="@{/item/search(page=${page}+1)}">next &rarr;</a></li>
+          <li class="previous"><a th:unless="${page==1}" href="#" th:href="@{/item/search(page=${page}-1,paging=prev)}">&larr; prev</a></li>
+          <li class="next"><a th:unless="${page==pageMax}" href="#" th:href="@{/item/search(page=${page}+1,paging=next)}">next &rarr;</a></li>
         </ul>
       </nav>
       <!-- ページ番号を指定して表示するフォーム -->
@@ -122,6 +119,7 @@
             </div>
             <div class="input-group col-xs-6">
               <input type="text" name="page" class="form-control" th:field="*{page}"/>
+              <input type="hidden" name="paging" class="form-control" value="search"/>
               <!-- 総ページ数 -->
               <div class="input-group-addon">/ <span th:text="${pageMax}">20</span></div>
             </div>
