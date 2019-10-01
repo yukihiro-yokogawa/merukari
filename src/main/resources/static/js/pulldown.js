@@ -1,18 +1,18 @@
 var defaultGrandChildText = "- Category -";
 var defaultGrandChildValue = 0;
-var defaultGrandChildOption = {value : defaultGrandChildValue , text: defaultGrandChildText,selected:true};
+var defaultGrandChildOption = {value : defaultGrandChildValue , text: defaultGrandChildText,selected:false};
 var defaultGrandChild = $('<option>',defaultGrandChildOption);
 $('#parent').append(defaultGrandChild);
 
 var defaultGrandChildText = "- grandChild -";
 var defaultGrandChildValue = 0;
-var defaultGrandChildOption = {value : defaultGrandChildValue , text: defaultGrandChildText,selected:true};
+var defaultGrandChildOption = {value : defaultGrandChildValue , text: defaultGrandChildText,selected:false};
 var defaultGrandChild = $('<option>',defaultGrandChildOption);
 $('#grand-child').append(defaultGrandChild);
 
 var defaultChildText = "- childCategory -";
 var defaultChildValue = 0;
-var defaultChildOption = {value : defaultChildValue , text: defaultChildText,selected:true};
+var defaultChildOption = {value : defaultChildValue , text: defaultChildText,selected:false};
 var defaultChild = $('<option>',defaultChildOption);
 
 $('#child').append(defaultChild);
@@ -129,6 +129,7 @@ $('#child').change(function(){
 
 $('#grand-child').change(function(){
 	var grandChildVal = $('#grand-child').val();
+	var grandChildVal = $('#grand-child :selected').text();
 	console.log(grandChildVal);
 })
 
